@@ -17,3 +17,7 @@ class User(db.Model):
     first_name = db.Column(db.String(15), nullable=False)
     last_name = db.Column(db.String(30), nullable=False)
     image_url = db.Column(db.Text, nullable=True, default='https://images.unsplash.com/photo-1635107510862-53886e926b74?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+
+    @property
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'

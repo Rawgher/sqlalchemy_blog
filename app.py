@@ -43,7 +43,7 @@ def add_user():
     last = request.form['last']
     pic_url = request.form['pic-url']
 
-    user= User(first_name=first, last_name=last, image_url=pic_url)
+    user = User(first_name=first, last_name=last, image_url=pic_url)
 
     db.session.add(user)
     db.session.commit()
