@@ -50,3 +50,10 @@ def add_user():
 
     users = User.query.all()
     return redirect('/users')
+
+@app.route("/users/<int:user_id>")
+def single_user(user_id):
+    """Show a single user account"""
+
+    user = User.query.get_or_404(user_id)
+    return render_template("user.html", user=user)

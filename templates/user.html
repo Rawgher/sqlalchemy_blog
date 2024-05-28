@@ -1,0 +1,28 @@
+{% extends 'base.html' %} {% block title %}All Users{% endblock %} {% block
+content %}
+
+<h1>Individual User</h1>
+
+<div class="row" style="margin-bottom: 20px">
+  <div class="col-md">
+    <img src="{{user.image_url}}" alt="user image" class="img-thumbnail" />
+  </div>
+
+  <div class="col-md">
+    <h2>{{user.first_name}} {{user.last_name}}</h2>
+    <div class="row">
+      <a href="/users/{{user.id}}/edit">
+        <button class="btn btn-primary" style="margin-right: 20px">
+          Edit User
+        </button></a
+      >
+      <a href="/users/{{user.id}}/delete">
+        <button class="btn btn-danger">Delete User</button></a
+      >
+    </div>
+  </div>
+</div>
+
+<a href="/"> <button class="btn btn-primary">Back to Home</button></a>
+
+{% endblock %}
