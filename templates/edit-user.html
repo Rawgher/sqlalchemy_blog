@@ -6,17 +6,38 @@ content %}
 <form method="POST">
   <div class="form-group">
     <label for="first">First Name</label>
-    <input type="text" class="form-control" name="first" required />
+    <input
+      type="text"
+      class="form-control"
+      name="first"
+      value="{{user.first_name}}"
+      required
+    />
   </div>
   <div class="form-group">
     <label for="last">Last Name</label>
-    <input type="text" class="form-control" name="last" required />
+    <input
+      type="text"
+      class="form-control"
+      name="last"
+      value="{{user.last_name}}"
+      required
+    />
   </div>
   <div class="form-group">
     <label for="pic-url">Profile Picture URL</label>
-    <input type="text" class="form-control" name="pic-url" />
+    <input
+      type="text"
+      class="form-control"
+      name="pic-url"
+      value="{{user.image_url}}"
+    />
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
+<a href="/users/{{user.id}}">
+  <button class="btn btn-primary" style="margin-top: 40px">Go Back</button></a
+>
 
 {% endblock %}

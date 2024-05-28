@@ -47,8 +47,6 @@ def add_user():
 
     db.session.add(user)
     db.session.commit()
-
-    users = User.query.all()
     return redirect('/users')
 
 @app.route("/users/<int:user_id>")
@@ -57,3 +55,34 @@ def single_user(user_id):
 
     user = User.query.get_or_404(user_id)
     return render_template("user.html", user=user)
+
+@app.route("/users/<int:user_id>/edit")
+def show_edit_user(user_id):
+    """Show a single user account"""
+
+    user = User.query.get_or_404(user_id)
+    return render_template("edit-user.html", user=user)
+
+@app.route("/users/<int:user_id>/edit", methods=["POST"])
+def edit_user(user_id):
+    """Edit a user and submit to the database"""
+
+    user = User.query.get_or_404(user_id)
+    user.first_name = request.form['first']
+    user.last_name = request.form['last']
+    user.image_url = request.form['pic-url']
+
+    db.session.add(user)
+    db.session.commit()
+
+    return redirect('/users')
+
+@app.route("/users/<int:user_id>/delete")
+def delete_user(user_id):
+    """Deletes a user from the database"""
+
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect('/users')
