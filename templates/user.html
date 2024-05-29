@@ -10,7 +10,8 @@ content %}
 
   <div class="col-md">
     <h2>{{user.full_name}}</h2>
-    <div class="row">
+
+    <div class="row mt-3">
       <a href="/users/{{user.id}}/edit">
         <button class="btn btn-primary" style="margin-right: 20px">
           Edit User
@@ -20,9 +21,26 @@ content %}
         <button class="btn btn-danger">Delete User</button></a
       >
     </div>
+
+    <div class="row mt-3">
+      <h2>Posts</h2>
+    </div>
+    <div class="row">
+      <ul>
+        {% for post in user.posts %}
+        <a href="/posts/{{post.id}}"><li>{{post.title}}</li></a>
+        {% endfor%}
+      </ul>
+    </div>
+
+    <div class="row">
+      <a href="/users/{{user.id}}/posts/new"
+        ><button class="btn btn-primary">Add Post</button></a
+      >
+    </div>
   </div>
 </div>
 
-<a href="/"> <button class="btn btn-primary">Back to Home</button></a>
+<a href="/"><button class="btn btn-primary">Back to Home</button></a>
 
 {% endblock %}

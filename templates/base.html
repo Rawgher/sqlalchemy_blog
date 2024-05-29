@@ -12,13 +12,10 @@
     <title>{% block title %}TITLE GOES HERE{% endblock %}</title>
   </head>
   <body>
-    <section class="container-fluid">
-      <div class="row">
-        <div class="col-md col-sm-0"></div>
-        <div class="col-md-8 col-sm-12">
+    <section class="container">
+      <div>
           {% block content %}BODY CONTENT GOES HERE{% endblock %}
         </div>
-        <div class="col-md col-sm-0"></div>
       </div>
     </section>
 
