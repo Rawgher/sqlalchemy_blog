@@ -19,9 +19,12 @@ debug = DebugToolbarExtension(app)
 
 connect_db(app)
 
+# GET ROUTES --------------------------------------------------
+
 @app.route("/")
 def home():
-    return redirect('/users')
+    posts = Post.query.order_by(Post.created_at.desc()).limit(5).all()
+    return render_template('home.html', posts=posts)
 
 @app.route("/users")
 def all_users():
@@ -34,20 +37,6 @@ def all_users():
 def new_user():
     """Show new user form"""
     return render_template("new-user.html")
-
-@app.route("/users/new", methods=["POST"])
-def add_user():
-    """Add a new user to the database"""
-
-    first = request.form['first']
-    last = request.form['last']
-    pic_url = request.form['pic-url']
-
-    user = User(first_name=first, last_name=last, image_url=pic_url)
-
-    db.session.add(user)
-    db.session.commit()
-    return redirect('/users')
 
 @app.route("/users/<int:user_id>")
 def single_user(user_id):
@@ -63,6 +52,41 @@ def show_edit_user(user_id):
     user = User.query.get_or_404(user_id)
     return render_template("edit-user.html", user=user)
 
+@app.route("/users/<int:user_id>/posts/new")
+def new_post_form(user_id):
+    """Show new post form"""
+    user = User.query.get_or_404(user_id)
+    return render_template("new-post.html")
+
+@app.route("/posts/<int:post_id>")
+def show_post(post_id):
+    """Show individual post"""
+    post = Post.query.get_or_404(post_id)
+    return render_template("post.html", post=post)
+
+@app.route("/posts/<int:post_id>/edit")
+def show_edit_post(post_id):
+    """Show a single user account"""
+
+    post = Post.query.get_or_404(post_id)
+    return render_template("edit-post.html", post=post)
+
+# POST ROUTES -------------------------------------------------
+
+@app.route("/users/new", methods=["POST"])
+def add_user():
+    """Add a new user to the database"""
+
+    first = request.form['first']
+    last = request.form['last']
+    pic_url = request.form['pic-url']
+
+    user = User(first_name=first, last_name=last, image_url=pic_url)
+
+    db.session.add(user)
+    db.session.commit()
+    return redirect('/users')
+
 @app.route("/users/<int:user_id>/edit", methods=["POST"])
 def edit_user(user_id):
     """Edit a user and submit to the database"""
@@ -77,22 +101,6 @@ def edit_user(user_id):
 
     return redirect('/users')
 
-@app.route("/users/<int:user_id>/delete")
-def delete_user(user_id):
-    """Deletes a user from the database"""
-
-    user = User.query.get_or_404(user_id)
-    db.session.delete(user)
-    db.session.commit()
-
-    return redirect('/users')
-
-@app.route("/users/<int:user_id>/posts/new")
-def new_post_form(user_id):
-    """Show new post form"""
-    user = User.query.get_or_404(user_id)
-    return render_template("new-post.html")
-
 @app.route("/users/<int:user_id>/posts/new", methods=["POST"])
 def add_post(user_id):
     """Add a new post to the database"""
@@ -105,20 +113,6 @@ def add_post(user_id):
     db.session.add(post)
     db.session.commit()
     return redirect(f'/users/{user_id}')
-
-@app.route("/posts/<int:post_id>")
-def show_post(post_id):
-    """Show individual post"""
-    post = Post.query.get_or_404(post_id)
-    return render_template("post.html", post=post)
-
-
-@app.route("/posts/<int:post_id>/edit")
-def show_edit_post(post_id):
-    """Show a single user account"""
-
-    post = Post.query.get_or_404(post_id)
-    return render_template("edit-post.html", post=post)
 
 @app.route("/posts/<int:post_id>/edit", methods=["POST"])
 def edit_post(post_id):
@@ -133,6 +127,18 @@ def edit_post(post_id):
 
     return redirect(f'/posts/{post_id}')
 
+# DELETE ROUTES -----------------------------------------------
+
+@app.route("/users/<int:user_id>/delete")
+def delete_user(user_id):
+    """Deletes a user from the database"""
+
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect('/users')
+
 @app.route("/posts/<int:post_id>/delete")
 def delete_post(post_id):
     """Deletes a post from the database"""
@@ -141,4 +147,4 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
 
-    return redirect('/users')
+    return redirect(f'/users/{post.user_id}')

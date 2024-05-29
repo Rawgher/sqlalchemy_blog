@@ -1,6 +1,6 @@
 from unittest import TestCase
 from app import app
-from models import db, User
+from models import db, User, Post
 from dotenv import load_dotenv
 import os
 
@@ -33,9 +33,10 @@ class UserViewsTestCase(TestCase):
             db.drop_all()
 
     def setUp(self):
-        """Add sample user."""
+        """Add sample user with posts."""
         with app.app_context():
             User.query.delete()
+            Post.query.delete()
 
             user = User(first_name="Test", last_name="User")
             db.session.add(user)
@@ -44,10 +45,19 @@ class UserViewsTestCase(TestCase):
             self.user_id = user.id
             self.user = user
 
+            post = Post(title='Test Post', content='Test content', user_id = user.id)
+            db.session.add(post)
+            db.session.commit()
+
+            self.post_id = post.id
+
+
     def tearDown(self):
         """Clean up any fouled transaction."""
         with app.app_context():
-            db.session.rollback()
+            Post.query.delete()
+            User.query.delete()
+            db.session.commit()
 
     def test_list_all_users(self):
         with app.test_client() as client:
@@ -63,10 +73,6 @@ class UserViewsTestCase(TestCase):
             resp = client.post("/users/new", data=u, follow_redirects=True)
             html = resp.get_data(as_text=True)
 
-             # Debugging: Print response data
-            print(f"Response status: {resp.status_code}")
-            print(f"Response data: {html}")
-
             self.assertEqual(resp.status_code, 200)
             self.assertIn('User Two', html)
 
@@ -78,6 +84,22 @@ class UserViewsTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('Test User', html)
 
+    def test_show_users_posts(self):
+        with app.test_client() as client:
+            resp = client.get(f"/users/{self.user_id}")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Test Post', html)
+
+    def show_post(self):
+        with app.test_client() as client:
+            resp = client.get(f"/posts/{self.post_id}")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Test Post', html)
+
     def test_delete_user(self):
         with app.test_client() as client:
             resp = client.get(f"/users/{self.user_id}/delete", follow_redirects=True)
@@ -86,6 +108,13 @@ class UserViewsTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertNotIn('Test User', html)
 
+    def test_delete_post(self):
+        with app.test_client() as client:
+            resp = client.get(f"/posts/{self.post_id}/delete", follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Test Post', html)
 
 if __name__ == '__main__':
     import unittest

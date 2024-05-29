@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {% block title %}Blog Home{% endblock %} {% block
+content %}
+
+<h1>Recent Blog Posts</h1>
+
+{% for post in posts %}
+<div>
+  <h1>{{post.title}}</h1>
+  <p>{{post.content}}</p>
+  <p>By {{post.user.full_name}} on {{post.clean_date}}</p>
+</div>
+{% endfor %}
+
+<a href="/users"> <button class="btn btn-primary">View Users</button></a>
+
+{% endblock %}
