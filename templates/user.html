@@ -15,11 +15,11 @@ content %}
       <a href="/users/{{user.id}}/edit">
         <button class="btn btn-primary" style="margin-right: 20px">
           Edit User
-        </button></a
-      >
+        </button>
+      </a>
       <a href="/users/{{user.id}}/delete">
-        <button class="btn btn-danger">Delete User</button></a
-      >
+        <button class="btn btn-danger">Delete User</button>
+      </a>
     </div>
 
     <div class="row mt-3">
@@ -34,13 +34,15 @@ content %}
     </div>
 
     <div class="row">
-      <a href="/users/{{user.id}}/posts/new"
-        ><button class="btn btn-primary">Add Post</button></a
-      >
+      <a href="/users/{{user.id}}/posts/new">
+        <button class="btn btn-primary">Add Post</button>
+      </a>
     </div>
   </div>
 </div>
 
-<a href="/"><button class="btn btn-primary">Back to Home</button></a>
+<a href="/">
+  <button class="btn btn-primary">Back to Home</button>
+</a>
 
 {% endblock %}

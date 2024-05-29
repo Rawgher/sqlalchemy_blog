@@ -105,3 +105,40 @@ def add_post(user_id):
     db.session.add(post)
     db.session.commit()
     return redirect(f'/users/{user_id}')
+
+@app.route("/posts/<int:post_id>")
+def show_post(post_id):
+    """Show individual post"""
+    post = Post.query.get_or_404(post_id)
+    return render_template("post.html", post=post)
+
+
+@app.route("/posts/<int:post_id>/edit")
+def show_edit_post(post_id):
+    """Show a single user account"""
+
+    post = Post.query.get_or_404(post_id)
+    return render_template("edit-post.html", post=post)
+
+@app.route("/posts/<int:post_id>/edit", methods=["POST"])
+def edit_post(post_id):
+    """Edit a post and submit to the database"""
+
+    post = Post.query.get_or_404(post_id)
+    post.title = request.form['title']
+    post.content = request.form['content']
+
+    db.session.add(post)
+    db.session.commit()
+
+    return redirect(f'/posts/{post_id}')
+
+@app.route("/posts/<int:post_id>/delete")
+def delete_post(post_id):
+    """Deletes a post from the database"""
+
+    post = Post.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+
+    return redirect('/users')
