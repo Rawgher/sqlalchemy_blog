@@ -1,0 +1,22 @@
+{% extends 'base.html' %} {% block title %}Add A Tag{% endblock %} {% block
+content %}
+
+<h1>Add a new Tag</h1>
+
+<form method="POST">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" name="name" required />
+  </div>
+
+  <button type="submit" class="btn btn-success">Submit</button>
+</form>
+
+<div class="mt-3">
+  <a href="/tags"
+    ><button class="btn btn-secondary" style="margin-right: 20px">
+      Cancel
+    </button></a
+  >
+</div>
+{% endblock %}
