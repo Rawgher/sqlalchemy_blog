@@ -42,3 +42,23 @@ class Post(db.Model):
     def clean_date(self):
         """Returns a formatted date"""
         return self.created_at.strftime("%m-%d-%Y - %H:%M")
+
+
+class PostTag(db.Model):
+    "Model to link Posts and Tags"
+
+    __tablename__ = 'post_tags'
+
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False, primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False, primary_key=True)  
+
+
+class Tag(db.Model):
+    "Tags Model"
+
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.Text, nullable=False, unique=True)
+
+    posts = db.relationship("Post", secondary="post_tags", backref="tags")
+
